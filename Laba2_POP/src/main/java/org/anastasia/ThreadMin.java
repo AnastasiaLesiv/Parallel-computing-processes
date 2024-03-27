@@ -15,7 +15,7 @@ public class ThreadMin extends Thread {
     }
     @Override
     public void run(){
-        partArray.incThreadCount();
         partArray.searchMinInPart(this.startIndex, this.finishIndex);
+        partArray.incThreadCount();
     }
 }
