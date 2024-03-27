@@ -66,10 +66,6 @@ public class ArrClass {
 
     private int threadCount = 0;
 
-    private int getThreadCount() {
-        return threadCount;
-    }
-
     public MinElementInfo threadMin() {
         ThreadMin[] threadMin = new ThreadMin[NUM_THREADS];
         for (int i = 0; i < NUM_THREADS; i++) {
@@ -78,17 +74,6 @@ public class ArrClass {
             threadMin[i] = new ThreadMin(startIndex, endIndex, this);
             threadMin[i].start();
         }
-
-        synchronized (this) {
-            while (getThreadCount() < NUM_THREADS) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
         return getMinElementInfo();
     }
 }
