@@ -31,7 +31,7 @@ public class ArrClass {
 
     private MinElementInfo minElementInfo = new MinElementInfo(Integer.MAX_VALUE, 0);
 
-    public synchronized void searchMinInPart(int startIndex, int finishIndex){
+    public void searchMinInPart(int startIndex, int finishIndex){
         int minElement = arrayElem[startIndex];
         int indexMin = startIndex;
         for (int i = startIndex + 1; i < finishIndex; i++) {
@@ -60,15 +60,15 @@ public class ArrClass {
 
     public synchronized void incThreadCount() {
         if (++threadCount == NUM_THREADS) {
-            notify();
+            notifyAll();
         }
     }
 
-    private int threadCount = 0;
 
     private int getThreadCount() {
         return threadCount;
     }
+    private int threadCount = 0;
 
     public MinElementInfo threadMin() {
         ThreadMin[] threadMin = new ThreadMin[NUM_THREADS];
@@ -78,7 +78,6 @@ public class ArrClass {
             threadMin[i] = new ThreadMin(startIndex, endIndex, this);
             threadMin[i].start();
         }
-
         synchronized (this) {
             while (getThreadCount() < NUM_THREADS) {
                 try {
@@ -88,7 +87,6 @@ public class ArrClass {
                 }
             }
         }
-
         return getMinElementInfo();
     }
 }
