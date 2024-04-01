@@ -33,6 +33,7 @@ class Philosopher extends Thread {
 
                 leftFork.release();
                 System.out.println("Philosopher " + id + " put down left fork.");
+                //think();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {

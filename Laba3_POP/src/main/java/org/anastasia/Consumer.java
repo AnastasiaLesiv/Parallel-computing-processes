@@ -1,5 +1,4 @@
 package org.anastasia;
-import java.util.concurrent.TimeUnit;
 
 public class Consumer extends Thread {
     private final int numberOfProducts;
@@ -14,13 +13,8 @@ public class Consumer extends Thread {
     public void run() {
         for (int i = 0; i < numberOfProducts; i++) {
             try {
-                manager.getBuffer().release();
-                TimeUnit.MILLISECONDS.sleep(300);
-                while (manager.isEmpty()) {
-                    TimeUnit.MILLISECONDS.sleep(500);
-                }
-                System.out.println("Consumed item " + manager.getStorage().poll());
-                manager.getBuffer().acquire();
+                String item = manager.consumeItem();
+                System.out.println("Consumed item " + item);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
