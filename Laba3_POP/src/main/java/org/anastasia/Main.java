@@ -6,6 +6,10 @@ public class Main {
         Manager manager = new Manager(BUFFER_SIZE);
 
         new Consumer(NUMBER_OF_PRODUCTS, manager).start();
+        new Consumer(NUMBER_OF_PRODUCTS, manager).start();
+
+        new Producer(NUMBER_OF_PRODUCTS, manager).start();
+        new Producer(NUMBER_OF_PRODUCTS, manager).start();
         new Producer(NUMBER_OF_PRODUCTS, manager).start();
 
     }
