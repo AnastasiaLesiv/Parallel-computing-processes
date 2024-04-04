@@ -1,23 +1,28 @@
 package org.anastasia;
 
-public class Consumer extends Thread {
-    private final int numberOfProducts;
-    private final Manager manager;
+import java.util.concurrent.BlockingQueue;
 
-    public Consumer(int numberOfProducts, Manager manager) {
-        this.numberOfProducts = numberOfProducts;
-        this.manager = manager;
+public class Consumer implements Runnable {
+    private final BlockingQueue<Integer> queue;
+    private final int poisonPill;
+
+    Consumer(BlockingQueue<Integer> queue, int poisonPill) {
+        this.queue = queue;
+        this.poisonPill = poisonPill;
     }
 
-    @Override
     public void run() {
-        for (int i = 0; i < numberOfProducts; i++) {
-            try {
-                String item = manager.consumeItem();
-                System.out.println("Consumed item " + item);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        try {
+            while (true) {
+                Integer number = queue.take();
+                if (number.equals(poisonPill)) {
+                    return;
+                }
+                String result = number.toString();
+                System.out.println(Thread.currentThread().getName() + " take: " + result);
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 }

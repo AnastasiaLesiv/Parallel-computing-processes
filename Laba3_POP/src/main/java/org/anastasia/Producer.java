@@ -1,24 +1,40 @@
 package org.anastasia;
 
-public class Producer extends Thread {
-    private final int numberOfProducts;
-    private final Manager manager;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadLocalRandom;
 
-    public Producer(int numberOfProducts, Manager manager) {
-        this.numberOfProducts = numberOfProducts;
-        this.manager = manager;
+public class Producer implements Runnable {
+
+    private final BlockingQueue<Integer> numbersQueue;
+    private final int numOfProducts;
+    private final int lastProduct;
+    private final int poisonPill;
+    private final int poisonPillPerProducer;
+
+    Producer(BlockingQueue<Integer> numbersQueue,int numOfProducts, int lastProduct, int poisonPill, int poisonPillPerProducer) {
+        this.numbersQueue = numbersQueue;
+        this.numOfProducts = numOfProducts;
+        this.lastProduct = lastProduct;
+        this.poisonPill = poisonPill;
+        this.poisonPillPerProducer = poisonPillPerProducer;
     }
 
-    @Override
     public void run() {
-        for (int i = 0; i < numberOfProducts; i++) {
-            String item = String.valueOf(i);
-            try {
-                manager.addItemToStorage(item);
-                System.out.println("Produced item " + item);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            productionOfProducts();
+        } catch (InterruptedException e) {
+            Thread.currentThread()
+                    .interrupt();
+        }
+    }
+
+    private void productionOfProducts() throws InterruptedException {
+        for (int i = lastProduct; i < lastProduct + numOfProducts; i++) {
+            numbersQueue.put(i);
+            System.out.println(Thread.currentThread().getName()  + " put " + i);
+        }
+        for (int j = 0; j < poisonPillPerProducer; j++) {
+            numbersQueue.put(poisonPill);
         }
     }
 }
