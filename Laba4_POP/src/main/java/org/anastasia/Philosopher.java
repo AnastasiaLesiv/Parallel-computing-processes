@@ -14,9 +14,7 @@ class Philosopher extends Thread {
     }
 
     public void run() {
-        while (true) {
-            think();
-
+        for(int i = 0; i < 2; i++) {
             try {
                 eatingLimit.acquire();
 
