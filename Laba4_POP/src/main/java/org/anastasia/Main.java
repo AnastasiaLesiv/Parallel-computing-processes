@@ -1,4 +1,5 @@
 package org.anastasia;
+
 import java.util.concurrent.Semaphore;
 public class Main {
     public static void main(String[] args) {
@@ -7,7 +8,7 @@ public class Main {
             forks[i] = new Semaphore(1);
         }
 
-        Semaphore eatingLimit = new Semaphore(2);
+        Semaphore eatingLimit = new Semaphore(4);
 
         Philosopher[] philosophers = new Philosopher[5];
         for (int i = 0; i < philosophers.length; i++) {
